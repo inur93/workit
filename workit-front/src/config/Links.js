@@ -1,0 +1,22 @@
+
+export const Links = {
+    root: () => `/workit`,
+    login: () => `/login`,
+    home: () => `/workit`,
+    profile: () => `/workit/profile`,
+    timeRegistration: () => `/workit/time_registrations`,
+    clients: () => `/workit/clients`,
+    createClient: () => `/workit/clients/create`,
+    createProject: (clientId = ":clientId") => `/workit/clients/${clientId}/projects/create`,
+    client: (id = ":clientId") => `/workit/clients/${id}`,
+    clientManage: (id = ":clientId") => `/workit/clients/${id}/manage`,
+    clientUsers: (clientId = ":clientId") => `/workit/clients/${clientId}/users`,
+    project: (projectId = ":projectId") => `/workit/projects/${projectId || ""}`,
+    projectUsers: (projectId = ":projectId") => `/workit/projects/${projectId}/users`,
+    projectManage: (projectId = ":projectId") => `/workit/projects/${projectId}/manage`,
+    projectSettings: (projectId = ":projectId") => `/workit/projects/${projectId}/settings`,
+    projectPermissions: (projectId = ":projectId") => `/workit/projects/${projectId}/permissions`,
+    createCase: (projectId = ":projectId") => `/workit/projects/${projectId}/create`,
+    viewCase: (projectId = ":projectId", caseId = ":caseId") => `/workit/projects/${projectId}/cases/${caseId}`,
+    editCase: (projectId = ":projectId", caseId = ":caseId") => `/workit/projects/${projectId}/cases/${caseId}/edit`,
+}
