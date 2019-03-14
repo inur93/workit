@@ -14,44 +14,22 @@ export const hasPerm = (policy) => {
         return false;
     }
     let allowed = false;
-    let allowedList = [];
-    const policies = Perm.config.userStore && Perm.config.userStore.policies;
-    if (!policies) return false;
+    const roles = Perm.config.userStore && Perm.config.userStore.self && Perm.config.userStore.self.roles;
+    if (!roles) return false;
 
-    const hasPermission = (policy) => {
-        let matchingPolicies = policies
-            .filter(p => new RegExp(policy.resource).test(p.resources[0]));
+    const hasPermission = (policy) => roles.includes(policy);
 
-
-        if (matchingPolicies && matchingPolicies.length > 0) {
-            //concat all permissions for all matching resources to
-            // determine if the combined policy has appropriate access
-            let permissions = [];
-            matchingPolicies.forEach(p => {
-               p.permissions.forEach(perm => permissions.push(perm));
-            });
-
-            let hasAccess = true;
-            policy.permissions.forEach(p => {
-                if(!permissions.includes(p)){
-                    hasAccess = false;
-                }
-            });
-            return hasAccess;
-        }
-        return false;
-    };
     if (policy instanceof Array) {
         for (let i = 0; i < policy.length; i++) {
             const perm = policy[i];
             if (hasPermission(perm)) {
-                allowedList.push(perm);
+                allowed = true;
             }
         }
     } else {
         allowed = hasPermission(policy);
     }
-    return allowed || (allowedList.length >= policy.length);
+    return allowed;
 };
 class Perm extends Component {
 
@@ -80,7 +58,7 @@ class Perm extends Component {
 export default withStyles(styles, {withTheme: true})(observer(Perm));
 
 Perm.propTypes = {
-    permissions: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+    permissions: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 };
 
 decorate(Perm, {

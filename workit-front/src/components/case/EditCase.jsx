@@ -96,11 +96,11 @@ class EditCase extends Component {
                 <Grid item>
                     <CustomTextField label={"Estimate"}
                                      value={estimate}
-                                     disabled={!hasPerm(Policies.projectDeveloper(projectId, caseId))}
+                                     disabled={!hasPerm(Policies.projectDeveloper(projectId))}
                                      onChange={e => this.aCase.estimate = e.target.value}/>
                 </Grid>
                 <Grid item>
-                    {hasPerm(Policies.projectDeveloper(projectId, caseId)) ?
+                    {hasPerm(Policies.projectDeveloper(projectId)) ?
                         <SelectUsers label={"Responsible"}
                                      store={userStore}
                                      multiple={false}

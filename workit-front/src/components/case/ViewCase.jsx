@@ -72,7 +72,7 @@ class ViewCase extends Component {
 
         const {hasError, error, isLoading, currentCase} = this.props.caseStore;
         if (isLoading) return <LinearProgress color="secondary"/>;
-        if (hasError) return <Error>{error}</Error>;
+        if (hasError) return <Error message={error}/>;
         const {title, id, description, priority, status, estimate, timeSpent, comments, responsible} = currentCase;
         const {classes, match} = this.props;
         const {projectId, caseId} = match.params;
@@ -86,14 +86,14 @@ class ViewCase extends Component {
                 </Grid>
                 <Grid item>
                     <Grid container spacing={8}>
-                        <Perm permissions={Policies.projectsIdCasesIdUpdate(projectId, caseId)}>
+                        <Perm permissions={[Policies.admin(), Policies.casesUpdate(projectId)]}>
                             <Grid item>
                                 <CustomButton variant="raised" color="primary"
                                               component={Link}
                                               to={Links.editCase(projectId, caseId)}>Edit</CustomButton>
                             </Grid>
                         </Perm>
-                        <Perm permissions={Policies.projectsIdCasesIdTimeReg(projectId, caseId)}>
+                        <Perm permissions={Policies.projectDeveloper(projectId)}>
                             <Grid item>
                                 <CustomButton variant="raised" color="primary"
                                               onClick={this.handleShowTimeRegistration}>Register time</CustomButton>

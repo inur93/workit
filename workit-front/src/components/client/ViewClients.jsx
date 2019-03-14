@@ -33,7 +33,7 @@ class ViewClients extends Component {
                 <Grid item>
                     <Title>Clients</Title>
                 </Grid>
-                <Perm permissions={Policies.clientsCreate()}>
+                <Perm permissions={Policies.admin()}>
                     <Grid item>
                         <Grid container spacing={8}>
                             <Grid item>

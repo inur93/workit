@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
-import {Link, Route, Switch, withRouter} from "react-router-dom";
+import {Route, Switch, withRouter} from "react-router-dom";
 import {MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import {inject, observer} from "mobx-react";
 import {exec} from 'child_process';
@@ -8,11 +8,9 @@ import {action, decorate, observable, reaction} from "mobx";
 import Editable from "./components/cms/Editable";
 
 import CreateClient from "./components/client/CreateClient";
-import {navLinks} from "./index";
 import ClientDashboard from "./components/client/ClientDashboard";
 import ProjectDashBoard from "./components/project/ProjectDashBoard";
 import {Links} from "./config/Links";
-import ProjectSettings from "./components/project/ProjectSettings";
 import CreateCase from "./components/case/CreateCase";
 import ViewCase from "./components/case/ViewCase";
 import EditCase from "./components/case/EditCase";
@@ -23,31 +21,17 @@ import Divider from "@material-ui/core/Divider/Divider";
 import List from "@material-ui/core/List/List";
 import ListSubheader from "@material-ui/core/ListSubheader/ListSubheader";
 import ListItem from "@material-ui/core/ListItem/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction";
 import Select from "@material-ui/core/Select/Select";
-
-
-import UsersIcon from '@material-ui/icons/Group';
-import PermissionIcon from '@material-ui/icons/Group';
 import TimeIcon from '@material-ui/icons/Timelapse';
-import ContactIcon from '@material-ui/icons/Phone';
-import SecurityIcon from '@material-ui/icons/Security';
 import SettingsIcon from '@material-ui/icons/Settings';
-
-import Toggle from '@material-ui/core/Switch';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import EditIcon from '@material-ui/icons/Edit';
 import HomeIcon from '@material-ui/icons/Home';
 import CasesIcon from '@material-ui/icons/List';
-import EnvironmentIcon from '@material-ui/icons/Terrain';
 import Home from "./components/Home";
 import {
     SidebarNavGroup,
     SidebarNavItem,
-    SidebarNavItemCollapse,
-    SidebarNavItemRoute, SidebarNavItemStatic,
+    SidebarNavItemStatic,
     Title
 } from "./components/shared/SimpleComponents";
 import ViewClients from "./components/client/ViewClients";
@@ -57,15 +41,12 @@ import ProjectPermissions from "./components/project/ProjectPermissions";
 import {Policies} from "./config/Policies";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import EditClient from "./components/client/EditClient";
-import TokenStore from "./stores/TokenStore";
 import UserStore from "./stores/UserStore";
 import MyProfile from "./components/profile/MyProfile";
 import CmsStore from "./stores/CmsStore";
-import Collapse from "@material-ui/core/Collapse/Collapse";
 import ProjectStore from "./stores/ProjectStore";
 import ClientStore from "./stores/ClientStore";
 import EditProject from "./components/project/EditProject";
-import Perm from "./components/management/Perm";
 
 const drawerWidth = 340;
 const styles = theme => ({
@@ -134,7 +115,7 @@ class App extends Component {
 
         reaction(() => userStore.self, self => {
             let editMode = localStorage.getItem("editMode");
-            if (userStore.hasAccess(Policies.fieldsAdmin())) {
+            if (userStore.hasAccess(Policies.admin())) {
                 this.editModeEnabled = (editMode === "true");
             } else {
                 this.editModeEnabled = false;
@@ -177,27 +158,27 @@ class App extends Component {
                 </div>
                 <Divider/>
                 <List component="nav">
-                    <SidebarNavItemStatic label={"home"} to={Links.home} exact icon={<HomeIcon/>}/>
-                    <SidebarNavItemStatic label={"clients"} to={Links.clients} exact icon={<HomeIcon/>}
-                                          policy={Policies.clientsRead()}/>
+                    <SidebarNavItemStatic label={"Home"} to={Links.home} exact icon={<HomeIcon/>}/>
+                    <SidebarNavItemStatic label={"Clients"} to={Links.clients} exact icon={<HomeIcon/>}
+                                          policy={Policies.admin()}/>
 
                     <SidebarNavGroup path={Links.client()} children={(match, path) => {
                         let clientId = match && match.params.clientId;
                         if (clientStore.currentClient) clientId = clientStore.currentClient.id;
                         return <div>
                             <ListSubheader>{clientId}</ListSubheader>
-                            <SidebarNavItem label="projects"
+                            <SidebarNavItem label="Projects"
                                             to={Links.client}
                                             exact icon={<CasesIcon/>}
-                                            policy={Policies.clientsIdRead(match && match.params.clientId)}
+                                            policy={[Policies.admin(), Policies.clientRead(match && match.params.clientId)]}
                                             param={"clientId"}
                                             match={match}
                                             path={path}
                             />
-                            <SidebarNavItem label={"manage-client"}
+                            <SidebarNavItem label={"Manage client"}
                                             to={Links.clientManage}
                                             exact icon={<SettingsIcon/>}
-                                            policy={Policies.clientsIdAdmin(match && match.params.clientId)}
+                                            policy={[Policies.admin(), Policies.clientUpdate(match && match.params.clientId)]}
                                             param={"clientId"}
                                             match={match}
                                             path={path}
@@ -211,25 +192,25 @@ class App extends Component {
                         if (projectStore.currentProject) projectId = projectStore.currentProject.id;
                         return <div>
                             <ListSubheader>{projectId}</ListSubheader>
-                            <SidebarNavItem label={"cases"}
+                            <SidebarNavItem label={"Cases"}
                                             to={Links.project}
                                             exact icon={<CasesIcon/>}
-                                            policy={Policies.projectsIdRead(projectId)}
+                                            policy={[Policies.admin(), Policies.projectRead(projectId)]}
                                             param={"projectId"}
                                             match={match}
                                             path={path}/>
-                            <SidebarNavItem label={"manage-project"}
+                            <SidebarNavItem label={"Manage project"}
                                             to={Links.projectManage}
                                             exact icon={<SettingsIcon/>}
-                                            policy={Policies.projectsIdAdmin(projectId)}
+                                            policy={[Policies.admin(), Policies.projectUpdate(projectId)]}
                                             param={"projectId"}
                                             match={match}
                                             path={path}/>
                         </div>
                     }}/>
                     <Divider/>
-                    <SidebarNavItemStatic label={"time registrations"} to={Links.timeRegistration} icon={<TimeIcon/>}
-                                          policy={Policies.mgmUsersSelfTimeRegRead()}/>
+                    <SidebarNavItemStatic label={"Time registrations"} to={Links.timeRegistration} icon={<TimeIcon/>}
+                                          policy={[Policies.developer(), Policies.admin()]}/>
 
                     <Divider/>
                     {/*<Perm permissions={Policies.mgmAdmin()}>

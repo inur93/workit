@@ -160,6 +160,7 @@ class Editable extends Component {
     }
 
     render() {
+        if(!this.props.field) return <span/>;
         const {classes, type} = this.props;
         const {editMode} = this;
         const dims = this.dims;

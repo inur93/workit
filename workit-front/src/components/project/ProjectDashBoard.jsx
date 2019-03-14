@@ -51,7 +51,7 @@ class ProjectDashBoard extends Component {
                 <Grid item>
                     <Grid container direction={"row"} spacing={16}>
                         <Grid item>
-                            <Perm permissions={Policies.projectsIdCasesCreate(projectId)}>
+                            <Perm permissions={[Policies.casesCreate(projectId), Policies.admin()]}>
                             <CustomButton variant="raised" color="primary"
                                           component={Link}
                                           to={Links.createCase(projectId)}>Create

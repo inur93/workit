@@ -142,12 +142,11 @@ export default class CaseStore {
     }
 
     handleError = err => {
-        if (err) {
-            this.error = err.message;
-
-        }else {
+        if(!err) err = {};
+        if(!err.message){
             err.message = "Unknown error";
         }
+        this.error = err.message;
         this.hasError = true;
         throw err;
     }

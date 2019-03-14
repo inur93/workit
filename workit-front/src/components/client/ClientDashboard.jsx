@@ -51,7 +51,7 @@ class ClientDashboard extends Component {
                     <Title isStatic>{name} ({id})</Title>
                 </Grid>
                 <Grid item>
-                    <Perm permissions={Policies.clientsIdCreate(id)}>
+                    <Perm permissions={[Policies.projectCreate(id), Policies.admin()]}>
                     <CustomButton color={"primary"}
                                   variant={"raised"}
                                   component={Link}

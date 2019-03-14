@@ -235,7 +235,7 @@ class Management extends Component {
                     title: "Resources",
                     nodes: resources,
                     actions: [
-                        <Perm permissions={Policies.mgmResourcesAdmin()}
+                        <Perm permissions={Policies.admin()}
                               key="update-resources">
                             <Button color="primary"
                                     variant="raised"
@@ -256,12 +256,12 @@ class Management extends Component {
                     title: "Roles",
                     nodes: roleTree,
                     actions: [
-                        <Perm permissions={Policies.mgmRolesUpdate()} key="edit-role">
+                        <Perm permissions={Policies.admin()} key="edit-role">
                             <Button color="primary"
                                     variant="raised"
                                     onClick={() => this.handleEditRole(currentRole)}>Edit role</Button>
                         </Perm>,
-                        <Perm permissions={Policies.mgmRolesDelete()} key="delete-role">
+                        <Perm permissions={Policies.admin()} key="delete-role">
                             <Button color="primary"
                                     variant="raised"
                                     onClick={() => this.deleteRole(currentRole)}>
@@ -283,14 +283,14 @@ class Management extends Component {
                     title: "Users",
                     nodes: users,
                     actions: [
-                        <Perm permissions={Policies.mgmUsersUpdate()} key="edit-user">
+                        <Perm permissions={Policies.admin()} key="edit-user">
                             <Button color="primary"
                                     variant="raised"
                                     onClick={() => this.handleEditUser(currentUser)}>
                                 Edit user
                             </Button>
                         </Perm>,
-                        <Perm permissions={Policies.mgmUsersDelete()} key="delete-user">
+                        <Perm permissions={Policies.admin()} key="delete-user">
                             <Button color="primary"
                                     variant="raised"
                                     onClick={() => this.deleteUser(currentUser)}>
@@ -452,9 +452,9 @@ class Management extends Component {
                           horizontal: 'center',
                       }}
                       onClose={() => this.addAnchor = null}>
-                    <Perm permissions={[Policies.mgmRolesCreate()]}><MenuItem
+                    <Perm permissions={[Policies.admin()]}><MenuItem
                         onClick={this.handleCreateRole}><GroupAdd/> Add role</MenuItem></Perm>
-                    <Perm permissions={Policies.mgmUsersCreate()}><MenuItem
+                    <Perm permissions={Policies.admin()}><MenuItem
                         onClick={this.handleCreateUser}><PersonAdd/> Add user</MenuItem></Perm>
                 </Menu>
 

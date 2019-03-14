@@ -19,6 +19,12 @@ class Error extends Component {
 
 
     render() {
+        const {message, error} = this.props;
+        if(error){
+            return <div className={this.props.classes.error}>
+                <Title>{D(error.message)}</Title>
+            </div>
+        }
         return (
             <div className={this.props.classes.error}>
                 <Title>{D(this.props.message)}</Title>
@@ -33,7 +39,8 @@ decorate(Error, {});
 
 Error.propTypes = {
     classes: PropTypes.object.isRequired,
-    message: PropTypes.string.isRequired
+    message: PropTypes.string,
+    error: PropTypes.object
 }
 
 Error.defaultProps = {};
